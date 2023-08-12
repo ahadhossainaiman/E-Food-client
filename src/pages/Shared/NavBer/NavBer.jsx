@@ -1,17 +1,64 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import { AuthContext } from "../../../providers/AuthProviders";
 
 const NavBar = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
+  console.log(user?.email);
   const navOptions = (
     <>
-      <li>
+      <li className="my-auto">
         <Link to="/">Home</Link>
       </li>
-      <li>
+      <li className="my-auto">
         <Link to="/menu">Our Menu</Link>
       </li>
-      <li>
+      <li className="my-auto">
         <Link to="/order/salad">Order Food</Link>
       </li>
+      <li>
+        <Link to="/">
+          <button className="btn">
+            <FaShoppingCart />
+            <div className="badge badge-secondary">+0</div>
+          </button>
+        </Link>
+      </li>
+
+      {user ? (
+        <>
+          <li>
+            <p className="bg-orange-500 my-auto">{user?.email}</p>
+          </li>
+          <li>
+            {" "}
+            <button
+              onClick={handleLogOut}
+              className="btn btn-ghost pt-4 mx-5 my-auto bg-red-500"
+            >
+              LogOut
+            </button>
+          </li>
+
+          <img
+            className="w-10 h-10 rounded-full my-auto"
+            src={user?.photoURL}
+            alt=""
+          />
+        </>
+      ) : (
+        <>
+          <li className="my-auto">
+            <Link to="/login">Login</Link>
+          </li>
+        </>
+      )}
     </>
   );
 
@@ -43,14 +90,14 @@ const NavBar = () => {
               {navOptions}
             </ul>
           </div>
-          <a className="btn btn-ghost normal-case text-xl">Bistro Boss</a>
+          <a className="btn btn-ghost normal-case text-xl">E-Food</a>
         </div>
-        <div className="navbar-center hidden lg:flex">
+        <div className="navbar-center hidden lg:flex mr-10 align-middle">
           <ul className="menu menu-horizontal px-1">{navOptions}</ul>
         </div>
-        <div className="navbar-end">
+        {/* <div className="navbar-end">
           <a className="btn">Get started</a>
-        </div>
+        </div> */}
       </div>
     </>
   );
